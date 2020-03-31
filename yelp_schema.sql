@@ -1,7 +1,6 @@
 create database YELP_DB;
 
-use baseball_test;
-set NAMES utf8mb4;
+use YELP_DB;
 
 drop table if exists `Business`;
 create table `Business` (
@@ -60,7 +59,7 @@ create table `Review` (
     `text` varchar(5000) default null,
     `useful` int default null,
     `funny` int default null,
-    `cool` int default null,
+    `cool` int default null
 );
 
 drop table if exists `Tip`;
