@@ -7,5 +7,5 @@ SET neighborhood = nullif(@vNB, '');
 
 load data INFILE '/var/lib/mysql-files/yelp_checkin.csv' 
 into table Checkin fields terminated BY ',' IGNORE 1 LINES
-(business_id,weekday,hour,checkins) 
+(business_id,weekday,hour,checkins);
 
