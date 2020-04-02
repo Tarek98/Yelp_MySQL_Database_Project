@@ -15,8 +15,8 @@ create table `Business` (
     `longitude` decimal(20, 17) default null,
     `stars` decimal(2,1) default null,
     `review_count` int default null,
-    `is_open` int default null,
-    `categories` varchar(255) default null
+    `is_open` boolean default null,
+    `categories` varchar(1000) default null
 );
 
 drop table if exists `Checkin`;
