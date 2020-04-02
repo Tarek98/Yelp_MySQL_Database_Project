@@ -1,3 +1,4 @@
+drop database if exists YELP_DB;
 create database YELP_DB;
 
 use YELP_DB;
