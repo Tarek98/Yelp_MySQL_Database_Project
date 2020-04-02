@@ -9,3 +9,7 @@ SET AB = nullif(@vAB, ''), R = nullif(@vR, ''), H = nullif(@vH, ''),
     2B = nullif(@v2B, ''), 3B = nullif(@v3B, ''), HR = nullif(@vHR, ''),
     RBI = nullif(@vRBI, ''), SO = nullif(@vSO, ''), BB = nullif(@vBB, '');
 
+load data INFILE '/var/lib/mysql-files/yelp_checkin.csv' 
+into table Checkin fields terminated BY ',' IGNORE 1 LINES
+(business_id,weekday,hour,checkins) 
+
