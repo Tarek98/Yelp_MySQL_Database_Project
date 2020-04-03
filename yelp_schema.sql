@@ -51,15 +51,15 @@ create table `BusinessFollowers` (
 
 drop table if exists `Review`;
 create table `Review` (
-    `review_id` varchar(30) default null,
-    `user_id` varchar(30) default null,
-    `business_id` varchar(30) default null,
-    `stars` int default null,
-    `date` varchar(12) default null,
+    `review_id` varchar(23) default null,
+    `user_id` varchar(22) default null,
+    `business_id` varchar(22) default null,
+    `stars` decimal(3,2) default null,
+    `date` varchar(10) default null,
     `text` varchar(5000) default null,
-    `useful` int default null,
-    `funny` int default null,
-    `cool` int default null
+    `useful` int unsigned default null,
+    `funny` int unsigned default null,
+    `cool` int unsigned default null
 );
 
 drop table if exists `Tip`;
