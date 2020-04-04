@@ -39,46 +39,6 @@ create table `UserTemp` (
 -- ---------------------------------
 -- New Tables (Normalized)        --
 -- ---------------------------------
-
-drop table if exists `Business`;
-create table `Business` (
-    `business_id` varchar(23) not null,
-    `name` varchar(100) default null,
-    `latitude` decimal(16,13) default null,
-    `longitude` decimal(16,13) default null,
-    `stars` decimal(2,1) default null,
-    `review_count` int default null,
-    `is_open` bit(1) default null,
-    primary key (business_id),
-    foreign key (latitude, longitude) references AddressLocations(latitude, longitude)
-);
-
-drop table if exists `BusinessCategories`;
-create table `BusinessCategories` (
-    `business_id` varchar(23) not null,
-    `category` varchar(100) not null,
-    primary key (business_id, category),
-    foreign key (business_id) references Business(business_id)
-);
-
-drop table if exists `CategoryFollowers`;
-create table `CategoryFollowers` (
-    `category` varchar(100) not null,
-    `user_id` varchar(23) not null,
-    primary (category, user_id),
-    foreign key (category) references BusinessCategories(category),
-    foreign key (user_id) references User(user_id)
-);
-
-drop table if exists `BusinessFollowers`;
-create table `BusinessFollowers` (
-    `business_id` varchar(23) not null,
-    `user_id` varchar(23) not null,
-    primary key (business_id, user_id),
-    foreign key (business_id) references Business(business_id),
-    foreign key (user_id) references User(user_id)
-);
-
 drop table if exists `AddressLocations`;
 create table `AddressLocations` (
     `latitude` decimal(16,13) not null,
@@ -91,13 +51,24 @@ create table `AddressLocations` (
     primary key (latitude, longitude)
 );
 
-drop table if exists `Checkin`;
-create table `Checkin` (
+drop table if exists `Business`;
+create table `Business` (
     `business_id` varchar(23) not null,
-    `weekday` varchar(3) not null,
-    `hour` varchar(5) not null,
-    `checkins` int default null,
-    primary key (business_id, weekday, hour),
+    `name` varchar(100) default null,
+    `latitude` decimal(16,13) default null,
+    `longitude` decimal(16,13) default null,
+    `stars` decimal(2,1) default null,
+    `review_count` int default null,
+    `is_open` boolean default null,
+    primary key (business_id),
+    foreign key (latitude, longitude) references AddressLocations(latitude, longitude)
+);
+
+drop table if exists `BusinessCategories`;
+create table `BusinessCategories` (
+    `business_id` varchar(23) not null,
+    `category` varchar(100) not null,
+    primary key (category, business_id),
     foreign key (business_id) references Business(business_id)
 );
 
@@ -114,6 +85,34 @@ create table `User` (
     `average_stars` decimal(3,2) default null,
     `last_online` varchar(10) default null,
     primary key (user_id)
+);
+
+drop table if exists `CategoryFollowers`;
+create table `CategoryFollowers` (
+    `category` varchar(100) not null,
+    `user_id` varchar(23) not null,
+    primary key (category, user_id),
+    foreign key (category) references BusinessCategories(category),
+    foreign key (user_id) references User(user_id)
+);
+
+drop table if exists `BusinessFollowers`;
+create table `BusinessFollowers` (
+    `business_id` varchar(23) not null,
+    `user_id` varchar(23) not null,
+    primary key (business_id, user_id),
+    foreign key (business_id) references Business(business_id),
+    foreign key (user_id) references User(user_id)
+);
+
+drop table if exists `Checkin`;
+create table `Checkin` (
+    `business_id` varchar(23) not null,
+    `weekday` varchar(3) not null,
+    `hour` varchar(5) not null,
+    `checkins` int default null,
+    primary key (business_id, weekday, hour),
+    foreign key (business_id) references Business(business_id)
 );
 
 drop table if exists `UserFollowers`;
