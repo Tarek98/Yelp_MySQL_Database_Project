@@ -1,7 +1,7 @@
 use YELP_DB;
 
 load data INFILE '/var/lib/mysql-files/yelp_business.csv' 
-into table Business fields terminated BY ',' ENCLOSED BY '"' IGNORE 1 LINES
+into table BusinessTemp fields terminated BY ',' ENCLOSED BY '"' IGNORE 1 LINES
 (business_id,name,@vNB,address,city,state,postal_code,latitude,longitude,stars,review_count,is_open,categories) 
 SET neighborhood = nullif(@vNB, '');
 
@@ -13,7 +13,7 @@ into table Checkin fields terminated BY ',' IGNORE 1 LINES
 -- user_id = '0njfJmB-7n84DlIgUByCNw'
 -- 4798 = len(user_id+', '+ 198*(user_id+', ') + user_id) 
 load data INFILE '/var/lib/mysql-files/yelp_user.csv' 
-into table User 
+into table UserTemp 
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY "\r\n" IGNORE 1 LINES 
 (user_id,name,@vRC,@vYsince,@vFriends,@vUseful,@vFunny,@vCool,@vFans,@dummy,average_stars,@dummy,@dummy,@dummy,@dummy,@dummy,@dummy,@dummy,@dummy,@dummy, @dummy, @dummy)
 SET review_count = cast(@vRC as unsigned), useful = cast(@vUseful as unsigned), 

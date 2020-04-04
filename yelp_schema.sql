@@ -1,3 +1,4 @@
+
 drop database if exists YELP_DB;
 create database YELP_DB;
 
@@ -35,10 +36,9 @@ create table `UserTemp` (
     `last_online` varchar(10) default null
 );
 
-
------------------------------------
+-- ---------------------------------
 -- New Tables                    --
------------------------------------
+-- ---------------------------------
 
 drop table if exists `Business`;
 create table `Business` (
@@ -48,7 +48,7 @@ create table `Business` (
     `longitude` varchar(255) default null,
     `stars` varchar(255) default null,
     `review_count` int default null,
-    `is_open` int default null,
+    `is_open` int default null
 );
 
 drop table if exists `BusinessCategories`;
@@ -71,8 +71,8 @@ create table `AddressLocations` (
     `address` varchar(255) default null,
     `city` varchar(255) default null,
     `state` varchar(255) default null,
-    `postal_code` varchar(10) default null,
-)
+    `postal_code` varchar(10) default null
+);
 
 drop table if exists `Checkin`;
 create table `Checkin` (
