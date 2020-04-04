@@ -2,10 +2,8 @@ import mysql.connector
 from mysql.connector import errorcode
 
 try:
-    cnx = mysql.connector.connect(user="lefteris", password="password",
-                                    host='127.0.0.1',
-                                    port='2522',
-                                    database='YELP_DB')
+    cnx = mysql.connector.connect(user="root", password="user_356",
+                                    host='192.168.2.208', database='YELP_DB')
 except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
         print("Something is wrong with your user name or password")
