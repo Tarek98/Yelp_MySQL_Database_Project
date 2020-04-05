@@ -5,8 +5,8 @@ use YELP_DB;
 -- ------------------------------------------
 load data INFILE '/var/lib/mysql-files/yelp_business.csv' 
 into table BusinessTemp fields terminated BY ',' ENCLOSED BY '"' IGNORE 1 LINES
-(business_id,name,@vNB,address,city,state,postal_code,latitude,longitude,stars,review_count,is_open,categories) 
-SET neighborhood = nullif(@vNB, '');
+(business_id,name,@vNB,address,city,state,postal_code,latitude,longitude,stars,review_count,is_open,@vCategories) 
+SET neighborhood = nullif(@vNB, ''), categories = left(@vCategories, length(@vCategories) - 1);
 
 -- followers is VARCHAR(5000) --> can fit max 200 user IDs in variable (see below: 4798 < 5000)
 -- user_id = '0njfJmB-7n84DlIgUByCNw'
@@ -39,6 +39,41 @@ insert into Business
 select business_id, name, latitude, longitude, stars, review_count, is_open
 from BusinessTemp;
 
+drop procedure if exists split_categories;
+delimiter ;;
+create procedure split_categories()
+begin
+    DECLARE done int default FALSE; DECLARE x int default 0;
+    DECLARE num_businesses int default 0; DECLARE num_categories int default 0;
+    DECLARE bId varchar(23) default NULL; DECLARE category_list varchar(5000) default NULL;
+    
+    DECLARE cur1 CURSOR FOR 
+        select business_id, 
+        categories, length(categories) - length(replace(categories, ';', '')) + 1
+        from BusinessTemp order by business_id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN cur1;
+
+    business_loop: LOOP   
+        FETCH cur1 INTO bId, category_list, num_categories;   
+        IF done THEN
+            LEAVE business_loop;
+        END IF;
+
+        SET x = 1;
+        WHILE x <= num_categories DO
+            insert ignore into BusinessCategories
+            select bId, substring_index(substring_index(category_list, ';', x), ';', -1);
+            
+            set x = x + 1;
+        END WHILE;
+    END LOOP;
+
+    CLOSE cur1;
+end;;
+delimiter ;
+
+call split_categories();
 
 -- -----------------------------------------------------------------------------
 -- Checkin, Review, and Tip tables are already normalized... Insert raw data  --
