@@ -4,7 +4,10 @@ class YelpServer(object):
     def __init__(self):
         pass
 
-    def post_on_topic(self, topic):
+    def post_review(self, user_id, restaurant_id, stars, text):
+        pass
+
+    def post_tip(self, user_id, restaurant_id, text):
         pass
 
     def follow_user(self, user):
@@ -22,7 +25,7 @@ class YelpServer(object):
     def get_post(self, user, date):
         pass
 
-    def get_all_topics(self):
+    def get_all_categories(self):
         pass
 
     def get_all_users(self):
