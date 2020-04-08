@@ -81,7 +81,6 @@ create table `User` (
     `useful` int unsigned default null,
     `funny` int unsigned default null,
     `cool` int unsigned default null,
-    `fans` int unsigned default null,
     `average_stars` decimal(3,2) default null,
     `last_online` varchar(10) default null,
     primary key (user_id)

@@ -75,6 +75,50 @@ delimiter ;
 
 call split_categories();
 
+-- BusinessTemp no longer needed, drop it
+drop table BusinessTemp;
+
+insert into User
+select user_id, name, review_count, yelping_since, useful, funny, cool, average_stars, last_online
+from UserTemp;
+
+drop procedure if exists split_followers;
+delimiter ;;
+create procedure split_followers()
+begin
+    DECLARE done int default FALSE; DECLARE x int default 0;
+    DECLARE num_users int default 0; DECLARE num_followers int default 0;
+    DECLARE pId varchar(23) default NULL; DECLARE follower_list varchar(5000) default NULL;
+    
+    DECLARE cur1 CURSOR FOR 
+        select user_id, 
+        followers, length(followers) - length(replace(followers, ', ', '')) + 1
+        from UserTemp order by user_id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN cur1;
+
+    user_loop: LOOP   
+        FETCH cur1 INTO pId, follower_list, num_followers;   
+        IF done THEN
+            LEAVE user_loop;
+        END IF;
+
+        IF follower_list <> 'None' THEN
+            SET x = 1;
+            WHILE x <= num_followers DO
+                insert ignore into UserFollowers
+                select pId, substring_index(substring_index(follower_list, ', ', x), ', ', -1);
+                
+                set x = x + 1;
+            END WHILE;
+        END IF;
+    END LOOP;
+
+    CLOSE cur1;
+end;;
+delimiter ;
+
+call split_followers();
 -- -----------------------------------------------------------------------------
 -- Checkin, Review, and Tip tables are already normalized... Insert raw data  --
 -- -----------------------------------------------------------------------------
