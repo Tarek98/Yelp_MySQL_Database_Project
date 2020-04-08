@@ -2,35 +2,67 @@
 
 class YelpServer(object):
     def __init__(self):
-        pass
+        self.user = "user_356"
+        self.password = "user_356"
+        self.host = "192.168.2.208"
+        self.database = "YELP_DB"
+
+    def execute_query(self, query):
+        try:
+            # replace user and password with credentials for mysql shell user with YELP_DB full access
+            # replace host with VM IP address (VM network setup as bridged adapter from virtualbox)
+            cnx = mysql.connector.connect(user=self.user, password=self.password,
+                                            host=self.host, database=self.database)
+            cursor = cnx.cursor()
+            cursor.execute(query)
+
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Something is wrong with your user name or password")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                print("Database does not exist")
+            else:
+                print(err)
+        else:
+            cnx.close()
 
     def post_review(self, user_id, restaurant_id, stars, text):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def post_tip(self, user_id, restaurant_id, text):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def follow_user(self, user):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def follow_topic(self, topic):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def get_latest_posts(self):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def react_to_post(self, post):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def get_post(self, user, date):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def get_all_categories(self):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def get_all_users(self):
-        pass
+        query = ""
+        self.execute_query(query)
 
     def search_user(self, firstname, lastname):
-        pass
+        query = ""
+        self.execute_query(query)
     
