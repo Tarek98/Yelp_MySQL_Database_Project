@@ -54,6 +54,8 @@ begin
         categories, length(categories) - length(replace(categories, ';', '')) + 1
         from BusinessTemp order by business_id;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    START TRANSACTION;
     OPEN cur1;
 
     business_loop: LOOP   
@@ -72,6 +74,7 @@ begin
     END LOOP;
 
     CLOSE cur1;
+    COMMIT;
 end;;
 delimiter ;
 
