@@ -27,7 +27,7 @@ create table `UserTemp` (
     `name` varchar(50) default null,
     `review_count` int unsigned default null,
     `yelping_since` varchar(10) default null,
-    `followers` varchar(5000) default null,
+    `followers` varchar(255) default null,
     `useful` int unsigned default null,
     `funny` int unsigned default null,
     `cool` int unsigned default null,
