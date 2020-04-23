@@ -209,11 +209,6 @@ search - Search for a post, category, user, or business
                 tip_id = input_list[1]
 
                 self.like_tip(tip_id)
-
-            elif command == "get":
-                self.get()
-            elif command == "search":
-                self.search()
             else:
                 print('Invalid input. Please try again. For more information type "help".')
                 continue
