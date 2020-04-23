@@ -75,6 +75,15 @@ search - Search for a post, category, user, or business
     def post_tip(self, restaurant_id, text):
         self.ys.post_tip(self.user_id, restaurant_id, text)
 
+    def follow_user(self, following_user_id):
+        self.ys.follow_user(self.user_id, following_user_id)
+
+    def follow_business(self, business_id):
+        self.ys.follow_business(self.user_id, business_id)
+
+    def follow_category(self, category):
+        self.ys.follow_category(self.user_id, category)
+
     def client_interface(self):
 
         print('Welcome to the Yelp Client. For a list of commands, type the command "help".')
@@ -143,7 +152,30 @@ search - Search for a post, category, user, or business
                 
 
             elif command == "follow":
-                self.follow()
+
+                if len(input_list) != 3:
+                    print("Invalid input. Please add follow type and either a user ID, business ID, or category.")
+                    continue
+
+                follow_type = input_list[1]
+
+                if follow_type == "user":
+                    user_id = input_list[2]
+                    self.follow_user(user_id)
+
+                elif follow_type == "business":
+                    business_id = input_list[2]
+                    self.follow_business(business_id)
+
+                elif follow_type == "category":
+                    category = input_list[2]
+                    self.follow_category(category)
+                else:
+                    print('Invalid follow type. Valid follow types are "user", "business", or "category".')
+
+
+
+
             elif command == "feed":
                 self.feed()
             elif command == "react":
