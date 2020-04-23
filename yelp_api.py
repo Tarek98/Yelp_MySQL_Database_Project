@@ -34,11 +34,15 @@ class YelpServer(object):
         query = ""
         self.execute_query(query)
 
-    def follow_user(self, user):
+    def follow_user(self, user_id, following_user_id):
         query = ""
         self.execute_query(query)
 
-    def follow_topic(self, topic):
+    def follow_business(self, user_id, business_id):
+        query = ""
+        self.execute_query(query)
+
+    def follow_category(self, user_id, category):
         query = ""
         self.execute_query(query)
 
