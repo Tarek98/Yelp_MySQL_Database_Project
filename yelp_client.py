@@ -84,6 +84,9 @@ search - Search for a post, category, user, or business
     def follow_category(self, category):
         self.ys.follow_category(self.user_id, category)
 
+    def feed(self):
+        self.ys.get_latest_posts(self.user_id)
+
     def client_interface(self):
 
         print('Welcome to the Yelp Client. For a list of commands, type the command "help".')
@@ -177,6 +180,9 @@ search - Search for a post, category, user, or business
 
 
             elif command == "feed":
+                if len(input_list) != 1:
+                    print("Invalid input. The feed command takes no arguments.")
+                    continue
                 self.feed()
             elif command == "react":
                 self.react()

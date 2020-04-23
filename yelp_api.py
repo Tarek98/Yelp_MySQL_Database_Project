@@ -46,7 +46,7 @@ class YelpServer(object):
         query = ""
         self.execute_query(query)
 
-    def get_latest_posts(self):
+    def get_latest_posts(self, user_id):
         query = ""
         self.execute_query(query)
 
