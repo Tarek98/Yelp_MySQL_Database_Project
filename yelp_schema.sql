@@ -6,7 +6,7 @@ use YELP_DB;
 
 drop table if exists `BusinessTemp`;
 create table `BusinessTemp` (
-    `business_id` varchar(23) default null,
+    `business_id` varchar(23) not null,
     `name` varchar(255) default null,
     `neighborhood` varchar(255) default null,
     `address` varchar(255) default null,
@@ -18,12 +18,13 @@ create table `BusinessTemp` (
     `stars` varchar(255) default null,
     `review_count` int default null,
     `is_open` int default null,
-    `categories` varchar(5000) default null
+    `categories` varchar(5000) default null,
+    primary key (business_id)
 );
 
 drop table if exists `UserTemp`;
 create table `UserTemp` (
-    `user_id` varchar(23) default null,
+    `user_id` varchar(23) not null,
     `name` varchar(50) default null,
     `review_count` int unsigned default null,
     `yelping_since` varchar(10) default null,
@@ -33,7 +34,8 @@ create table `UserTemp` (
     `cool` int unsigned default null,
     `fans` int unsigned default null,
     `average_stars` decimal(3,2) default null,
-    `last_online` varchar(10) default null
+    `last_online` varchar(10) default null,
+    primary key (user_id)
 );
 
 -- ---------------------------------
@@ -125,7 +127,7 @@ create table `UserFollowers` (
 
 drop table if exists `Review`;
 create table `Review` (
-    `review_id` varchar(23) not null,
+    `review_id` int not null auto_increment,
     `user_id` varchar(23) default null,
     `business_id` varchar(23) default null,
     `stars` decimal(3,2) default null,
