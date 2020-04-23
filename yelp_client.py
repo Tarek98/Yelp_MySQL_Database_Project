@@ -37,19 +37,16 @@ feed - Returns the latest feed content from the last time the user signed in
     usage:
         feed
 
-react - Adds a reaction to the review specified as the argument
+react - Adds a reaction to the review specified as the argument (only for reviews)
     usage:
         react <review-id> <reaction-type>
-
-        or
-
-        react <tip-id> <reaction-type>
 
     For a review:
         <reaction-type> can be "useful", "funny", "cool"
 
-    For a tip:
-        <reaction-type> can be "like"
+like - Give a like to a tip (only for tips)
+    usage:
+        like <tip-id>
 
 get - Gets either a post, all categories, or all users
     usage:
@@ -86,6 +83,12 @@ search - Search for a post, category, user, or business
 
     def feed(self):
         self.ys.get_latest_posts(self.user_id)
+
+    def react_to_review(self, review_id, reaction):
+        self.ys.react_to_review(self.user_id, review_id, reaction)
+
+    def like_tip(self, tip_id):
+        self.ys.like_tip(self.user_id, tip_id)
 
     def client_interface(self):
 
@@ -185,7 +188,28 @@ search - Search for a post, category, user, or business
                     continue
                 self.feed()
             elif command == "react":
-                self.react()
+                if len(input_list) != 3:
+                    print("Invalid input. Please add a review ID and a reaction.")
+                    continue
+                
+                review_id = input_list[1]
+                reaction = input_list[2]
+
+                if reaction != "useful" and \
+                    reaction != "funny" and \
+                    reaction != "cool":
+                    print("Invalid reaction type.")
+                    continue
+
+                self.react_to_review(review_id, reaction)
+
+            elif command == "like":
+                if len(input_list) != 2:
+                    print("Invalid input. Please add a tip ID")
+                tip_id = input_list[1]
+
+                self.like_tip(tip_id)
+
             elif command == "get":
                 self.get()
             elif command == "search":

@@ -50,7 +50,11 @@ class YelpServer(object):
         query = ""
         self.execute_query(query)
 
-    def react_to_post(self, post):
+    def react_to_review(self, user_id, review_id, reaction):
+        query = ""
+        self.execute_query(query)
+
+    def like_tip(self, user_id, tip_id):
         query = ""
         self.execute_query(query)
 
