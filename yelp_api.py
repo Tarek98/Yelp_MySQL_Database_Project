@@ -36,6 +36,14 @@ class YelpServer(object):
     #   to the function, return 0 for success, and an error message is thrown by the 
     #   execute_query() helper above if there is a database exception.
 
+    def login_user(self, user_id):
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            # user_id doesn't exist! Please login with a valid user_id...
+            return -1
+        return 0
+
     def post_review(self, user_id, business_id, stars, text):
         # validate that user and business exist
         q1 = self.execute_query(\
@@ -120,7 +128,9 @@ class YelpServer(object):
 
         return 0
 
-    def get_latest_posts(self, user_id):
+    # returns review_ids if num_posts_limit is 0, and 
+    #  otherwise returns the limited number of full reviews
+    def get_latest_posts(self, user_id, num_posts_limit = 0):
         ## validate that current user exists (should be moved to query at client login!)
         q1 = self.execute_query(\
             "select count(*) from User where user_id = '{}'".format(user_id))
@@ -131,49 +141,48 @@ class YelpServer(object):
         last_online = self.execute_query(\
             "select last_online from User where user_id = '{}'".format(user_id))
         last_online = last_online[0][0]
+
         # find all users user follows
         users_followed = self.execute_query(\
             "select user_id from UserFollowers where follower_id = '{}'".format(user_id))
-        if len(users_followed) == 
-        users_followed = tuple(str(x[0]) for x in users_followed)\
-            if users_followed else "('')"
-
-        [[('tarek',)],[('lefteris',)]]
-        x = ('tarek', 'lefteris')
-        "select from dssd where user_id in ('tarek', 'left')"
-
-        # find all businesses user follows or within categories user is interested in
-        categories_followed = self.execute_query(\
-            "select category from CategoryFollowers where user_id = '{}'".format(user_id))
-        businesses_followed = self.execute_query(\
-            "select business_id from BusinessFollowers where user_id = '{}'".format(user_id))
-        businesses_interested = self.execute_query(\
-            "select distinct business_id from Business where business_id in"
-            + " (select * from CategoryFollowers where user_id = '{0}') union (select business_id from BusinessFollowers where user_id = '{0}')".format(user_id))
+        if not users_followed:
+            users_followed = "('')"
+        else:
+            users_followed = str(tuple(str(x[0]) for x in users_followed))
+            if len(users_followed) == 1:
+                # single element tuple has string form of "(e,)"; remove comma
+                users_followed = users_followed.replace(",", "")
+                
+        # find all businesses user follows (or within categories user is interested in)
+        query1 = "select distinct business_id from BusinessCategories where category in"+\
+                " (select category from CategoryFollowers where user_id = '{}')".format(user_id))
+        query2 = "select business_id from BusinessFollowers where user_id = '{}'".format(user_id))
+        union_query = "select * from ( "+query1+" ) union ( "+query2+" )"
+        businesses_followed = self.execute_query(union_query)
+        if not businesses_followed:
+            businesses_followed = "('')"
+        else:
+            businesses_followed = str(tuple(str(x[0]) for x in businesses_followed))
+            if len(businesses_followed) == 1:
+                businesses_followed = businesses_followed.replace(",", "")
         
-        # find all businesses corresponding with categories the user follows
-
-        
-        
-        # find latests post IDs (tips and reviews) from all followed topics/users since last read
-        
-        businesses_followed = tuple(str(x[0]) for x in businesses_followed)\
-            if businesses_followed else "('')"
-        categories_followed = tuple(str(x[0]) for x in categories_followed)\
-            if len(categories_followed) > 1 else "('')"
-
-            user_posts = self.execute_query(\
-            "select review_id from Review where user_id in {} and date > '{}'".format(\
-            users_followed, last_online))
-        if businesses_followed:
-            businesses_followed = tuple(str(x[0]) for x in businesses_followed)
-        if categories_followed:
-            categories_followed = tuple(str(x[0]) for x in categories_followed)
-
-        ## find all posts (tips and reviews) from topics followed since last read
-        
-
-        # return 0
+        # find latests posts from all followed topics/users since last read
+        if num_posts == 0:
+            posts_query = self.execute_query(\
+                "select distinct review_id from Review where date > '{}' and (user_id in {} or business_id in {}) order by date desc".format(\
+                last_online, users_followed, businesses_followed))
+            # return list of review_ids
+            return [p[0] for p in posts_query]
+        else:
+            posts_query = self.execute_query(\
+                "select distinct * from Review where date > '{}' and (user_id in {} or business_id in {}) order by date desc limit {}".format(\
+                last_online, users_followed, businesses_followed, num_posts_limit))
+            # return list of review items (dictionaries)
+            posts = []
+            for (p in posts_query):
+                posts.append({"review_id": p[0], "user_id": p[1], "business_id": p[2], "stars": p[3], "date": p[4],
+                    "text": p[5], "useful": p[6], "funny": p[7], "cool": p[8]})
+            return posts
 
     def react_to_review(self, user_id, review_id, reaction):
         query = ""
