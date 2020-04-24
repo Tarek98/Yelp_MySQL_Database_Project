@@ -16,9 +16,9 @@ help - Get help on CLI usage.
     usage:
         help
 
-post - Post a review to a restaurant.
+post - Post a review to a business.
     usage:
-        post review <stars> <restaurant-id> <text>
+        post review <stars> <business-id> <text>
 
     <stars> is an integer from 1 to 5
 
@@ -121,7 +121,12 @@ react - Adds a reaction to the review specified as the argument (only for review
                     restaurant_id = input_list[3]
                     text = input_list[4]
 
-                    self.post_review(stars, restaurant_id, text)
+                    result = self.post_review(stars, restaurant_id, text)
+
+                    if result == 0:
+                        print("Review posted successfully.")
+                    elif result == -2:
+                        print("Invalid business ID. The business does not exist.")
 
                 else:
                     print('Invalid post type. Valid post types currently include "review"')
