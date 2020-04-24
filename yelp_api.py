@@ -4,9 +4,9 @@ from mysql.connector import errorcode
 
 class YelpServer(object):
     def __init__(self):
-        self.user = "user_356"
-        self.password = "user_356"
-        self.host = "192.168.2.208"
+        self.user = "lefteris"
+        self.password = "lefteris"
+        self.host = "192.168.0.128"
         self.database = "YELP_DB"
 
     def execute_query(self, query):
@@ -161,16 +161,44 @@ class YelpServer(object):
         if q2[0][0] == 0:
             return -2
 
-        cur_reaction = self.execute_query(\
-            "select react_type from ReviewReacts where user_id='{}'' and review_id='{}';".format())
+        q_str = "select react_type from ReviewReacts where user_id='{}' and review_id='{}'".format(user_id, review_id)
+
+        print("q_str:", q_str)
+
+        cur_reaction = self.execute_query(q_str)
+
+        print cur_reaction
+        print cur_reaction[0][0]
+
+        print(len(cur_reaction))
 
         if len(cur_reaction) != 0:
             self.execute_query(\
-                "update ReviewReacts set reaction = '{}' where user_id='{}' and review_id='{}';".format())
+                "update ReviewReacts set react_type = '{}' where user_id='{}' and review_id='{}'".format(reaction, user_id, review_id))
+            print("len(cur_reaction) != 0")
+            if cur_reaction[0][0] != reaction:
+                print("cur_reaction[0][0] == reaction")
+                react_count = self.execute_query(\
+                                "select {} from Review where review_id='{}'".format(cur_reaction[0][0], review_id))
+                if react_count[0][0] > 0:
+                    self.execute_query(\
+                        "update Review set {} = '{}' where review_id='{}'".format(cur_reaction[0][0], react_count[0][0]-1, review_id))
 
+                print("cur_reaction[0][0] == reaction")
+                react_count = self.execute_query(\
+                                "select {} from Review where review_id='{}'".format(reaction, review_id))
+                self.execute_query(\
+                    "update Review set {} = '{}' where review_id='{}'".format(reaction, react_count[0][0]+1, review_id))
 
+        elif len(cur_reaction) == 0:
+            self.execute_query(\
+                "insert into ReviewReacts (review_id, user_id, react_type) values ('{}', '{}', '{}')".format(review_id, user_id, reaction))
+            react_count = self.execute_query(\
+                            "select {} from Review where review_id='{}'".format(reaction, review_id))
+            self.execute_query(\
+                "update Review set {} = '{}' where review_id='{}'".format(reaction, react_count[0][0]+1, review_id))
 
-        #increment post's reaction counters
+        
         
 
     # def get_post(self, user, date):
@@ -191,5 +219,6 @@ if __name__ == '__main__':
     # testing
     # S.post_review('___DPmKJsBF2X6ZKgAeGqg', '__1uG7MLxWGFIv2fCGPiQQ', '4.0', 'Good physio')
     # print(S.follow_business('1UnZiZiuDLYxDmE2uzvB4A', '4JNXUYY8wbaaDmk3BPzlWw'))
-    print(S.get_latest_posts('1UnZiZiuDLYxDmE2uzvB4A', 10))
+    #print(S.get_latest_posts('1UnZiZiuDLYxDmE2uzvB4A', 10))
+    print(S.react_to_review('___DPmKJsBF2X6ZKgAeGqg', '100', 'cool'))
     
