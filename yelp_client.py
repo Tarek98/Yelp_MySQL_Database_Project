@@ -16,9 +16,9 @@ help - Get help on CLI usage.
     usage:
         help
 
-post - Post a review to a restaurant.
+post - Post a review to a business.
     usage:
-        post review <stars> <restaurant-id> <text>
+        post review <stars> <business-id> <text>
 
     <stars> is an integer from 1 to 5
 
