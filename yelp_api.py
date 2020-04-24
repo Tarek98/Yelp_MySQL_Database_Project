@@ -55,24 +55,99 @@ class YelpServer(object):
         return 0
 
     def post_tip(self, user_id, business_id, text):
-        query = ""
-        self.execute_query(query)
+        # validate that user and business exist
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+        q2 = self.execute_query(\
+            "select count(*) from Business where business_id = '{}'".format(business_id))
+        if q2[0][0] == 0:
+            return -2
+
+        today_date = datetime.date.today().isoformat()
+        self.execute_query("insert into Tip (user_id, business_id, date, text)" +\
+            "values ('{}', '{}', '{}', '{}')".format(\
+            user_id, business_id, today_date, text))
+
+        return 0
 
     def follow_user(self, user_id, following_user_id):
-        query = ""
-        self.execute_query(query)
+        # validate that both users exists
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+        q2 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(following_user_id))
+        if q2[0][0] == 0:
+            return -2
+
+        self.execute_query("insert into UserFollowers (user_id, follower_id)" +\
+            "values ('{}', '{}')".format(following_user_id, user_id))
+
+        return 0
 
     def follow_business(self, user_id, business_id):
-        query = ""
-        self.execute_query(query)
+        # validate that user and business exist
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+        q2 = self.execute_query(\
+            "select count(*) from Business where business_id = '{}'".format(business_id))
+        if q2[0][0] == 0:
+            return -2
+
+        self.execute_query("insert into BusinessFollowers (business_id, user_id)" +\
+            "values ('{}', '{}')".format(user_id, business_id))
+
+        return 0
 
     def follow_category(self, user_id, category):
-        query = ""
-        self.execute_query(query)
+         # validate that user and category exist
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+        q2 = self.execute_query(\
+            "select count(*) from BusinessCategories where category = '{}'".format(category))
+        if q2[0][0] == 0:
+            return -2
+
+        self.execute_query("insert into CategoryFollowers (category, user_id)" +\
+            "values ('{}', '{}')".format(category, user_id))
+
+        return 0
 
     def get_latest_posts(self, user_id):
-        query = ""
-        self.execute_query(query)
+        ## validate that current user exists (should be moved to query at client login!)
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+
+        # find all users that this user follows
+        users_followed = self.execute_query(\
+            "select user_id from UserFollowers where follower_id = '{}'".format(user_id))
+        # 
+        if q1[0][0] == 0:
+            return -1
+
+        # validate that user and category exist
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+        q2 = self.execute_query(\
+            "select count(*) from BusinessCategories where category = '{}'".format(category))
+        if q2[0][0] == 0:
+            return -2
+
+        self.execute_query("insert into CategoryFollowers (category, user_id)" +\
+            "values ('{}', '{}')".format(category, user_id))
+
+        return 0
 
     def react_to_review(self, user_id, review_id, reaction):
         query = ""
@@ -94,13 +169,9 @@ class YelpServer(object):
         query = ""
         self.execute_query(query)
 
-    def search_user(self, firstname, lastname):
-        query = ""
-        self.execute_query(query)
-
 if __name__ == '__main__':
     S = YelpServer()
 
-    # test cases
+    # testing
     S.post_review('___DPmKJsBF2X6ZKgAeGqg', '__1uG7MLxWGFIv2fCGPiQQ', '4.0', 'Good physio')
     
