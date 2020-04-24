@@ -1,4 +1,6 @@
-
+import datetime
+import mysql.connector
+from mysql.connector import errorcode
 
 class YelpServer(object):
     def __init__(self):
@@ -15,7 +17,11 @@ class YelpServer(object):
                                             host=self.host, database=self.database)
             cursor = cnx.cursor()
             cursor.execute(query)
-
+            res = [x for x in cursor]
+            cnx.commit()
+            cursor.close()
+            
+            return res
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
                 print("Something is wrong with your user name or password")
@@ -26,11 +32,29 @@ class YelpServer(object):
         else:
             cnx.close()
 
-    def post_review(self, user_id, restaurant_id, stars, text):
-        query = ""
-        self.execute_query(query)
+    # In all API functions below, we return -n for an error in the nth argument passed
+    #   to the function, return 0 for success, and an error message is thrown by the 
+    #   execute_query() helper above if there is a database exception.
 
-    def post_tip(self, user_id, restaurant_id, text):
+    def post_review(self, user_id, business_id, stars, text):
+        # validate that user and business exist
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+        q2 = self.execute_query(\
+            "select count(*) from Business where business_id = '{}'".format(business_id))
+        if q2[0][0] == 0:
+            return -2
+
+        today_date = datetime.date.today().isoformat()
+        self.execute_query("insert into Review (user_id, business_id, stars, date, text)" +\
+            "values ('{}', '{}', '{}', '{}', '{}')".format(\
+            user_id, business_id, stars, today_date, text))
+
+        return 0
+
+    def post_tip(self, user_id, business_id, text):
         query = ""
         self.execute_query(query)
 
@@ -73,4 +97,10 @@ class YelpServer(object):
     def search_user(self, firstname, lastname):
         query = ""
         self.execute_query(query)
+
+if __name__ == '__main__':
+    S = YelpServer()
+
+    # test cases
+    S.post_review('___DPmKJsBF2X6ZKgAeGqg', '__1uG7MLxWGFIv2fCGPiQQ', '4.0', 'Good physio')
     

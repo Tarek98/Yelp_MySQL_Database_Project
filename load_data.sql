@@ -134,16 +134,17 @@ drop table UserTemp;
 -- -----------------------------------------------------------------------------
 -- Checkin, Review, and Tip tables are already normalized... Insert raw data  --
 -- -----------------------------------------------------------------------------
-load data INFILE '/var/lib/mysql-files/yelp_checkin.csv' 
+load data INFILE '/var/lib/mysql-files/yelp_checkin.csv' ignore
 into table Checkin fields terminated BY ',' IGNORE 1 LINES
 (business_id,weekday,hour,checkins);
 
-load data INFILE '/var/lib/mysql-files/yelp_review.csv' 
+load data INFILE '/var/lib/mysql-files/yelp_review.csv' ignore
 into table Review 
 fields terminated BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES
-(review_id,user_id,business_id,@vStars,date,@vText,@vUseful,@vFunny,@vCool)
+(@rId,user_id,business_id,@vStars,date,@vText,@vUseful,@vFunny,@vCool)
 SET stars  = cast(@vStars as unsigned), useful  = cast(@vUseful as unsigned),
-text = left(@vText, 5000), funny = cast(@vFunny as unsigned), cool  = cast(@vCool as unsigned);
+text = left(@vText, 5000), funny = cast(@vFunny as unsigned), cool  = cast(@vCool as unsigned),
+review_id = default;
 
 load data INFILE '/var/lib/mysql-files/yelp_tip.csv' 
 into table Tip 
