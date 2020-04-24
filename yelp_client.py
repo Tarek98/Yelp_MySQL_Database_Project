@@ -31,7 +31,9 @@ follow - Follow a user, business or category
 feed - Returns the latest feed content from the last time the user signed in
        A sign in is recorded for a user every time the CLI is run.
     usage:
-        feed
+        feed <?num_posts?>
+    
+    <?num_posts?> is an optional argument, indicating the number of posts to show on the feed
 
 react - Adds a reaction to the review specified as the argument (only for reviews)
     usage:
@@ -56,8 +58,8 @@ react - Adds a reaction to the review specified as the argument (only for review
     def follow_category(self, category):
         self.ys.follow_category(self.user_id, category)
 
-    def feed(self):
-        self.ys.get_latest_posts(self.user_id)
+    def feed(self, num_posts = 0):
+        self.ys.get_latest_posts(self.user_id, num_posts)
 
     def react_to_review(self, review_id, reaction):
         self.ys.react_to_review(self.user_id, review_id, reaction)
@@ -66,11 +68,12 @@ react - Adds a reaction to the review specified as the argument (only for review
 
         print('Welcome to the Yelp Client. Please enter your login user_id.')
 
-        while not self.user_id:
+        while(True):
             user_login = raw_input().split(" ")[0]
             if len(user_login) == 22:
                 if self.ys.login_user(user_login) == 0:
                     self.user_id = user_login
+                    break
                 else:
                     print("The user ID you entered is not registered. Please try again...")
             else:
@@ -111,7 +114,7 @@ react - Adds a reaction to the review specified as the argument (only for review
 
                     stars = input_list[2]
 
-                    if int(stars) > 5 or int(stars) < 1:
+                    if not stars.isdigit() or int(stars) > 5 or int(stars) < 1:
                         print("Invalid input for stars. Stars should be between 1 and 5. Please try again.")
                         continue
 
@@ -147,10 +150,13 @@ react - Adds a reaction to the review specified as the argument (only for review
                     print('Invalid follow type. Valid follow types are "user", "business", or "category".')
 
             elif command == "feed":
-                if len(input_list) != 1:
-                    print("Invalid input. The feed command takes no arguments.")
+                if len(input_list) == 2 and input_list[1].isdigit():
+                    self.feed(input_list[1])
+                elif len(input_list) == 1:
+                    self.feed()
+                else:
+                    print("Invalid input. The feed command takes at most 1 argument.")
                     continue
-                self.feed()
 
             elif command == "react":
                 if len(input_list) != 3:
