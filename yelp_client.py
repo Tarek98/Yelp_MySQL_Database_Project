@@ -16,13 +16,9 @@ help - Get help on CLI usage.
     usage:
         help
 
-post - Post a review or tip to a restaurant.
+post - Post a review to a restaurant.
     usage:
         post review <stars> <restaurant-id> <text>
-
-        or
-
-        post tip <restaurant-id> <text>
 
     <stars> is an integer from 1 to 5
 
@@ -44,33 +40,12 @@ react - Adds a reaction to the review specified as the argument (only for review
     For a review:
         <reaction-type> can be "useful", "funny", "cool"
 
-like - Give a like to a tip (only for tips)
-    usage:
-        like <tip-id>
-
-get - Gets either a post, all categories, or all users
-    usage:
-        get <get-type>
-
-    <get-type> is either "post", "categories" or "users"
-
-search - Search for a post, category, user, or business
-    usage:
-        search <search-type> <search-query>
-
-    <search-type> is either "post", "category", "user", or "business"
-    <search-query> is all or part of the word to be matched
-
-
         """
 
         print(help_string)
 
     def post_review(self, stars, restaurant_id, text):
         self.ys.post_review(self.user_id, restaurant_id, stars, text)
-
-    def post_tip(self, restaurant_id, text):
-        self.ys.post_tip(self.user_id, restaurant_id, text)
 
     def follow_user(self, following_user_id):
         self.ys.follow_user(self.user_id, following_user_id)
@@ -87,12 +62,21 @@ search - Search for a post, category, user, or business
     def react_to_review(self, review_id, reaction):
         self.ys.react_to_review(self.user_id, review_id, reaction)
 
-    def like_tip(self, tip_id):
-        self.ys.like_tip(self.user_id, tip_id)
-
     def client_interface(self):
 
-        print('Welcome to the Yelp Client. For a list of commands, type the command "help".')
+        print('Welcome to the Yelp Client. Please enter your login user_id.')
+
+        while not self.user_id:
+            user_login = raw_input().split(" ")[0]
+            if len(user_login) == 22:
+                if self.ys.login_user(user_login) == 0:
+                    self.user_id = user_login
+                else:
+                    print("The user ID you entered is not registered. Please try again...")
+            else:
+                print("User ID must be 22 characters. Please try again...")
+            
+        print('Login successful!\nFor a list of commands, type the command "help".')
 
         while(True):
 
@@ -104,6 +88,7 @@ search - Search for a post, category, user, or business
 
             if command == "help":
                 self.help()
+
             elif command == "post":
                 if len(input_list) < 2:
                     print("Invalid input. Please add review type and review text")
@@ -135,27 +120,9 @@ search - Search for a post, category, user, or business
 
                     self.post_review(stars, restaurant_id, text)
 
-                elif post_type == "tip":
-                    input_list = command_string.split(" ", 3)
-
-                    if len(input_list) < 3:
-                        print("Invalid input. Please add restaruant-id")
-                        continue
-                    elif len(input_list) < 4:
-                        print("Invalid input. Please add review text")
-                        continue
-
-                    restaurant_id = input_list[2]
-                    text = input_list[3]
-
-                    self.post_tip(restaurant_id, text)
-
                 else:
-                    print('Invalid post type. Valid post types are "tip" and "review"')
+                    print('Invalid post type. Valid post types currently include "review"')
                     continue
-
-
-                
 
             elif command == "follow":
 
@@ -179,14 +146,12 @@ search - Search for a post, category, user, or business
                 else:
                     print('Invalid follow type. Valid follow types are "user", "business", or "category".')
 
-
-
-
             elif command == "feed":
                 if len(input_list) != 1:
                     print("Invalid input. The feed command takes no arguments.")
                     continue
                 self.feed()
+
             elif command == "react":
                 if len(input_list) != 3:
                     print("Invalid input. Please add a review ID and a reaction.")
@@ -203,17 +168,9 @@ search - Search for a post, category, user, or business
 
                 self.react_to_review(review_id, reaction)
 
-            elif command == "like":
-                if len(input_list) != 2:
-                    print("Invalid input. Please add a tip ID")
-                tip_id = input_list[1]
-
-                self.like_tip(tip_id)
             else:
                 print('Invalid input. Please try again. For more information type "help".')
                 continue
-
-
 
 
 if __name__ == '__main__':
