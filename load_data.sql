@@ -132,7 +132,7 @@ call split_followers();
 -- UserTemp no longer needed, drop it
 drop table UserTemp;
 -- -----------------------------------------------------------------------------
--- Checkin, Review, and Tip tables are already normalized... Insert raw data  --
+-- Checkin and Review tables are already normalized... Insert raw data        --
 -- -----------------------------------------------------------------------------
 load data INFILE '/var/lib/mysql-files/yelp_checkin.csv' ignore
 into table Checkin fields terminated BY ',' IGNORE 1 LINES
@@ -145,9 +145,4 @@ fields terminated BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LIN
 SET stars  = cast(@vStars as unsigned), useful  = cast(@vUseful as unsigned),
 text = left(@vText, 5000), funny = cast(@vFunny as unsigned), cool  = cast(@vCool as unsigned),
 review_id = default;
-
-load data INFILE '/var/lib/mysql-files/yelp_tip.csv' 
-into table Tip 
-fields terminated BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES
-(text,date,likes,business_id,user_id);
 
