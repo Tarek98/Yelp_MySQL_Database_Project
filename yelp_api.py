@@ -127,27 +127,47 @@ class YelpServer(object):
         if q1[0][0] == 0:
             return -1
 
-        # find all users that this user follows
+        # determine when user was last online (when they last read from all topics)
+        last_online = self.execute_query(\
+            "select last_online from User where user_id = '{}'".format(user_id))
+        last_online = last_online[0][0]
+        # find all users user follows
         users_followed = self.execute_query(\
             "select user_id from UserFollowers where follower_id = '{}'".format(user_id))
-        # 
-        if q1[0][0] == 0:
-            return -1
+        users_followed = tuple(str(x[0]) for x in users_followed)\
+            if users_followed else "('')"
+        # find all businesses user follows or within categories user is interested in
+        categories_followed = self.execute_query(\
+            "select category from CategoryFollowers where user_id = '{}'".format(user_id))
+        businesses_followed = self.execute_query(\
+            "select business_id from BusinessFollowers where user_id = '{}'".format(user_id))
+        businesses_interested = self.execute_query(\
+            "select distinct business_id from Business where business_id in"
+            + " (select category from CategoryFollowers where user_id = '{}') union (select business_id from BusinessFollowers where user_id = '{}')".format(user_id))
+        
+        # find all businesses corresponding with categories the user follows
 
-        # validate that user and category exist
-        q1 = self.execute_query(\
-            "select count(*) from User where user_id = '{}'".format(user_id))
-        if q1[0][0] == 0:
-            return -1
-        q2 = self.execute_query(\
-            "select count(*) from BusinessCategories where category = '{}'".format(category))
-        if q2[0][0] == 0:
-            return -2
+        
+        
+        # find latests post IDs (tips and reviews) from all followed topics/users since last read
+        
+        businesses_followed = tuple(str(x[0]) for x in businesses_followed)\
+            if businesses_followed else "('')"
+        categories_followed = tuple(str(x[0]) for x in categories_followed)\
+            if len(categories_followed) > 1 else "('')"
 
-        self.execute_query("insert into CategoryFollowers (category, user_id)" +\
-            "values ('{}', '{}')".format(category, user_id))
+            user_posts = self.execute_query(\
+            "select review_id from Review where user_id in {} and date > '{}'".format(\
+            users_followed, last_online))
+        if businesses_followed:
+            businesses_followed = tuple(str(x[0]) for x in businesses_followed)
+        if categories_followed:
+            categories_followed = tuple(str(x[0]) for x in categories_followed)
 
-        return 0
+        ## find all posts (tips and reviews) from topics followed since last read
+        
+
+        # return 0
 
     def react_to_review(self, user_id, review_id, reaction):
         query = ""
@@ -173,5 +193,6 @@ if __name__ == '__main__':
     S = YelpServer()
 
     # testing
-    S.post_review('___DPmKJsBF2X6ZKgAeGqg', '__1uG7MLxWGFIv2fCGPiQQ', '4.0', 'Good physio')
+    # S.post_review('___DPmKJsBF2X6ZKgAeGqg', '__1uG7MLxWGFIv2fCGPiQQ', '4.0', 'Good physio')
+    S.get_latest_posts('___I9ZYdYGkZ6dMYxwJEIQ')
     
