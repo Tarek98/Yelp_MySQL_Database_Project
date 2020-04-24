@@ -155,10 +155,23 @@ react - Adds a reaction to the review specified as the argument (only for review
                     print('Invalid follow type. Valid follow types are "user", "business", or "category".')
 
             elif command == "feed":
+                posts = []
                 if len(input_list) == 2 and input_list[1].isdigit():
-                    self.feed(input_list[1])
+                    posts = self.feed(input_list[1])
+                    for i,p in enumerate(posts):
+                        print("\n--- Post {} ---".format(i) + "\n")
+                        print("Review ID: " + p.review_id + "\n")
+                        print("Business ID: " + p.business_id + "\n")
+                        print("Author ID: " + p.user_id + "\n")
+                        print("Stars: " + p.stars + "\n")
+                        print("Text: " + p.text + "\n")
+                        print("Date: " + p.date + "\n")
+                        print("Useful: " + p.useful + "\n")
+                        print("Funny: " + p.funny + "\n")
+                        print("Cool: " + p.cool + "\n")
+
                 elif len(input_list) == 1:
-                    self.feed()
+                    print(self.feed())
                 else:
                     print("Invalid input. The feed command takes at most 1 argument.")
                     continue
