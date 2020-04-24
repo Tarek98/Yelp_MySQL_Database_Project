@@ -134,8 +134,14 @@ class YelpServer(object):
         # find all users user follows
         users_followed = self.execute_query(\
             "select user_id from UserFollowers where follower_id = '{}'".format(user_id))
+        if len(users_followed) == 
         users_followed = tuple(str(x[0]) for x in users_followed)\
             if users_followed else "('')"
+
+        [[('tarek',)],[('lefteris',)]]
+        x = ('tarek', 'lefteris')
+        "select from dssd where user_id in ('tarek', 'left')"
+
         # find all businesses user follows or within categories user is interested in
         categories_followed = self.execute_query(\
             "select category from CategoryFollowers where user_id = '{}'".format(user_id))
@@ -143,7 +149,7 @@ class YelpServer(object):
             "select business_id from BusinessFollowers where user_id = '{}'".format(user_id))
         businesses_interested = self.execute_query(\
             "select distinct business_id from Business where business_id in"
-            + " (select category from CategoryFollowers where user_id = '{}') union (select business_id from BusinessFollowers where user_id = '{}')".format(user_id))
+            + " (select * from CategoryFollowers where user_id = '{0}') union (select business_id from BusinessFollowers where user_id = '{0}')".format(user_id))
         
         # find all businesses corresponding with categories the user follows
 
@@ -173,21 +179,21 @@ class YelpServer(object):
         query = ""
         self.execute_query(query)
 
-    def like_tip(self, user_id, tip_id):
-        query = ""
-        self.execute_query(query)
+    # def like_tip(self, user_id, tip_id):
+    #     query = ""
+    #     self.execute_query(query)
 
-    def get_post(self, user, date):
-        query = ""
-        self.execute_query(query)
+    # def get_post(self, user, date):
+    #     query = ""
+    #     self.execute_query(query)
 
-    def get_all_categories(self):
-        query = ""
-        self.execute_query(query)
+    # def get_all_categories(self):
+    #     query = ""
+    #     self.execute_query(query)
 
-    def get_all_users(self):
-        query = ""
-        self.execute_query(query)
+    # def get_all_users(self):
+    #     query = ""
+    #     self.execute_query(query)
 
 if __name__ == '__main__':
     S = YelpServer()
