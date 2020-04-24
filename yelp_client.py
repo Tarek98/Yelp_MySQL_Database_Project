@@ -140,14 +140,26 @@ react - Adds a reaction to the review specified as the argument (only for review
                 if follow_type == "user":
                     user_id = input_list[2]
                     self.follow_user(user_id)
+                    if result == 0:
+                        print("User {} followed successfully.".format(user_id))
+                    elif result == -2:
+                        print("Invalid user ID. The user does not exist.")
 
                 elif follow_type == "business":
                     business_id = input_list[2]
                     self.follow_business(business_id)
+                    if result == 0:
+                        print("Business {} followed successfully.".format(business_id))
+                    elif result == -2:
+                        print("Invalid business ID. The business does not exist.")
 
                 elif follow_type == "category":
                     category = input_list[2]
                     self.follow_category(category)
+                    if result == 0:
+                        print("{} followed successfully.".format(category))
+                    elif result == -2:
+                        print("Invalid category. The category does not exist.")
                 else:
                     print('Invalid follow type. Valid follow types are "user", "business", or "category".')
 
@@ -172,6 +184,10 @@ react - Adds a reaction to the review specified as the argument (only for review
                     continue
 
                 self.react_to_review(review_id, reaction)
+                if result == 0:
+                    print("Reacted to review {} successfully.".format(review_id))
+                elif result == -2:
+                    print("Invalid review_id. The review does not exist.")
 
             else:
                 print('Invalid input. Please try again. For more information type "help".')
