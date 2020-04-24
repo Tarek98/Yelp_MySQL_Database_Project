@@ -163,28 +163,17 @@ class YelpServer(object):
 
         q_str = "select react_type from ReviewReacts where user_id='{}' and review_id='{}'".format(user_id, review_id)
 
-        print("q_str:", q_str)
-
         cur_reaction = self.execute_query(q_str)
-
-        print cur_reaction
-        print cur_reaction[0][0]
-
-        print(len(cur_reaction))
 
         if len(cur_reaction) != 0:
             self.execute_query(\
                 "update ReviewReacts set react_type = '{}' where user_id='{}' and review_id='{}'".format(reaction, user_id, review_id))
-            print("len(cur_reaction) != 0")
             if cur_reaction[0][0] != reaction:
-                print("cur_reaction[0][0] == reaction")
                 react_count = self.execute_query(\
                                 "select {} from Review where review_id='{}'".format(cur_reaction[0][0], review_id))
                 if react_count[0][0] > 0:
                     self.execute_query(\
                         "update Review set {} = '{}' where review_id='{}'".format(cur_reaction[0][0], react_count[0][0]-1, review_id))
-
-                print("cur_reaction[0][0] == reaction")
                 react_count = self.execute_query(\
                                 "select {} from Review where review_id='{}'".format(reaction, review_id))
                 self.execute_query(\
@@ -220,5 +209,5 @@ if __name__ == '__main__':
     # S.post_review('___DPmKJsBF2X6ZKgAeGqg', '__1uG7MLxWGFIv2fCGPiQQ', '4.0', 'Good physio')
     # print(S.follow_business('1UnZiZiuDLYxDmE2uzvB4A', '4JNXUYY8wbaaDmk3BPzlWw'))
     #print(S.get_latest_posts('1UnZiZiuDLYxDmE2uzvB4A', 10))
-    print(S.react_to_review('___DPmKJsBF2X6ZKgAeGqg', '100', 'cool'))
+    print(S.react_to_review('___DPmKJsBF2X6ZKgAeGqg', '100', 'funny'))
     
