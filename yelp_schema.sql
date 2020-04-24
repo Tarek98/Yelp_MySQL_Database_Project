@@ -141,28 +141,6 @@ create table `Review` (
     foreign key (business_id) references Business(business_id)
 );
 
-drop table if exists `Tip`;
-create table `Tip` (
-    `tip_id` int not null auto_increment,
-    `text` varchar(500) default null,
-    `date` varchar(10) default null,
-    `likes` smallint default 0,
-    `business_id` varchar(23) default null,
-    `user_id` varchar(23) default null,
-    primary key (tip_id),
-    foreign key (business_id) references Business(business_id),
-    foreign key (user_id) references User(user_id)
-);
-
-drop table if exists `TipLikes`;
-create table `TipLikes` (
-    `tip_id` int not null auto_increment,
-    `user_id` varchar(23) not null,
-    primary key (tip_id, user_id),
-    foreign key (tip_id) references Tip(tip_id),
-    foreign key (user_id) references User(user_id)
-);
-
 drop table if exists `ReviewReacts`;
 create table `ReviewReacts` (
     `review_id` int not null auto_increment,
