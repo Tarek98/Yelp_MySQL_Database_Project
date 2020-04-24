@@ -157,7 +157,7 @@ create table `Tip` (
 drop table if exists `TipLikes`;
 create table `TipLikes` (
     `tip_id` int not null auto_increment,
-    `user_id` varchar(23) default null
+    `user_id` varchar(23) not null,
     primary key (tip_id, user_id),
     foreign key (tip_id) references Tip(tip_id),
     foreign key (user_id) references User(user_id)
@@ -166,8 +166,8 @@ create table `TipLikes` (
 drop table if exists `ReviewReacts`;
 create table `ReviewReacts` (
     `review_id` int not null auto_increment,
-    `user_id` varchar(23) default null,
-    `react_type` varchar(6)
+    `user_id` varchar(23) not null,
+    `react_type` varchar(6),
     primary key (review_id, user_id),
     foreign key (review_id) references Review(review_id),
     foreign key (user_id) references User(user_id)
