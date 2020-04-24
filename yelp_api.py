@@ -176,8 +176,28 @@ class YelpServer(object):
         # return 0
 
     def react_to_review(self, user_id, review_id, reaction):
-        query = ""
-        self.execute_query(query)
+        ## validate that current user exists (should be moved to query at client login!)
+        q1 = self.execute_query(\
+            "select count(*) from User where user_id = '{}'".format(user_id))
+        if q1[0][0] == 0:
+            return -1
+
+        q2 = self.execute_query(\
+            "select count(*) from Review where review_id = '{}'".format(review_id))
+        if q2[0][0] == 0:
+            return -2
+
+        cur_reaction = self.execute_query(\
+            "select react_type from ReviewReacts where user_id='{}'' and review_id='{}';".format())
+
+        if len(cur_reaction) != 0:
+            self.execute_query(\
+                "update ReviewReacts set reaction = '{}' where user_id='{}' and review_id='{}';".format())
+
+
+
+        #increment post's reaction counters
+        
 
     # def like_tip(self, user_id, tip_id):
     #     query = ""
