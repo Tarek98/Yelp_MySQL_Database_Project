@@ -24,9 +24,10 @@ post - Post a review to a business.
 
 follow - Follow a user, business or category
     usage:
-        follow <user-id>
+        follow <follow-type> <id>
 
-    <id> can be a user id, business id, or category id
+    <category-type> can be either "user", "business", or "category"
+    <id> can be a user id, business id, or category
 
 feed - Returns the latest feed content from the last time the user signed in
        A sign in is recorded for a user every time the CLI is run.
@@ -47,22 +48,22 @@ react - Adds a reaction to the review specified as the argument (only for review
         print(help_string)
 
     def post_review(self, stars, restaurant_id, text):
-        self.ys.post_review(self.user_id, restaurant_id, stars, text)
+        return self.ys.post_review(self.user_id, restaurant_id, stars, text)
 
     def follow_user(self, following_user_id):
-        self.ys.follow_user(self.user_id, following_user_id)
+        return self.ys.follow_user(self.user_id, following_user_id)
 
     def follow_business(self, business_id):
-        self.ys.follow_business(self.user_id, business_id)
+        return self.ys.follow_business(self.user_id, business_id)
 
     def follow_category(self, category):
-        self.ys.follow_category(self.user_id, category)
+        return self.ys.follow_category(self.user_id, category)
 
     def feed(self, num_posts = 0):
-        self.ys.get_latest_posts(self.user_id, num_posts)
+        return self.ys.get_latest_posts(self.user_id, num_posts)
 
     def react_to_review(self, review_id, reaction):
-        self.ys.react_to_review(self.user_id, review_id, reaction)
+        return self.ys.react_to_review(self.user_id, review_id, reaction)
 
     def client_interface(self):
 
