@@ -3,7 +3,6 @@ Yelp educational database
 
 
 ## Dependencies
-
 - pip install mysql-connector-python
 
 ## Setting up the database
@@ -14,5 +13,6 @@ Yelp educational database
 - run load_data.sql on the VM
 
 ## Running the CLI
+- set the IP address of the VM in yelp_api.py and set the credentials of your SQL user
 - run yelp_client.py with no arguments
 - for a list of commands type help
