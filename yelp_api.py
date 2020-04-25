@@ -133,7 +133,7 @@ class YelpServer(object):
                 businesses_followed = str(businesses_followed)
 
         # find latests posts from all followed topics/users since last read
-        posts_query = "select distinct * from Review where date > '{}' and (user_id in {} or business_id in {})".format(\
+        posts_query = "select distinct * from Review where date > '{}' and (user_id in {} or business_id in {}) order by date desc".format(\
             last_online, users_followed, businesses_followed)
             
         if num_posts_limit == 0:

@@ -35,6 +35,8 @@ feed - Returns the latest feed content from the last time the user signed in
         feed <?num_posts?>
     
     <?num_posts?> is an optional argument, indicating the number of posts to show on the feed
+    - If the argument above is not provided, the feed shows review_ids for all posts the user is following
+    - Otherwise, the feed argument returns detailed reviews for all posts
 
 react - Adds a reaction to the review specified as the argument (only for reviews)
     usage:
@@ -171,22 +173,29 @@ react - Adds a reaction to the review specified as the argument (only for review
                 if len(input_list) == 2 and input_list[1].isdigit():
                     posts = self.feed(input_list[1])
                     if not posts:
-                        print("[]")
+                        print("Feed is empty... Try following some people, businesses, or categories!")
                     else:
                         for i,p in enumerate(posts):
-                            print("\n--- Post {} ---".format(i) + "\n")
-                            print("Review ID: " + p.review_id + "\n")
-                            print("Business ID: " + p.business_id + "\n")
-                            print("Author ID: " + p.user_id + "\n")
-                            print("Stars: " + p.stars + "\n")
-                            print("Text: " + p.text + "\n")
-                            print("Date: " + p.date + "\n")
-                            print("Useful: " + p.useful + "\n")
-                            print("Funny: " + p.funny + "\n")
-                            print("Cool: " + p.cool + "\n")
+                            print("\n--- Post {} ---".format(i + 1) + "\n")
+                            print("Review ID: " + str(p["review_id"]) + "\n")
+                            print("Date: " + str(p["date"]) + "\n")
+                            print("Business ID: " + str(p["business_id"]) + "\n")
+                            print("Author ID: " + str(p["user_id"]) + "\n")
+                            print("Stars: " + str(p["stars"]) + "\n")
+                            print("Text: " + p["text"] + "\n")
+                            print("Useful: " + str(p["useful"]) + "\n")
+                            print("Funny: " + str(p["funny"]) + "\n")
+                            print("Cool: " + str(p["cool"]) + "\n")
+                            print("End of Feed!")
+
 
                 elif len(input_list) == 1:
-                    print(self.feed())
+                    post_ids = self.feed()
+                    if not post_ids:
+                        print("Feed is empty... Try following some people, businesses, or categories!")
+                    else:
+                        print(post_ids)
+                        print("\nEnd of Feed!")
                 else:
                     print("Invalid input. The feed command takes at most 1 argument.")
                     continue
