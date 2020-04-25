@@ -197,7 +197,7 @@ exit - Logs the user out and exits from client program
                             print("Useful: " + str(p["useful"]) + "\n")
                             print("Funny: " + str(p["funny"]) + "\n")
                             print("Cool: " + str(p["cool"]) + "\n")
-                            print("End of Feed!")
+                        print("End of Feed!")
 
 
                 elif len(input_list) == 1:
