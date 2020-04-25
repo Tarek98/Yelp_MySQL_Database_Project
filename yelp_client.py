@@ -24,9 +24,10 @@ post - Post a review to a business.
 
 follow - Follow a user, business or category
     usage:
-        follow <user-id>
+        follow <follow-type> <id>
 
-    <id> can be a user id, business id, or category id
+    <category-type> can be either "user", "business", or "category"
+    <id> can be a user id, business id, or category
 
 feed - Returns the latest feed content from the last time the user signed in
        A sign in is recorded for a user every time the CLI is run.
