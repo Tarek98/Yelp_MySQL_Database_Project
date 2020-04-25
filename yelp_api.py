@@ -4,9 +4,9 @@ from mysql.connector import errorcode
 
 class YelpServer(object):
     def __init__(self):
-        self.user = "user_356"
-        self.password = "user_356"
-        self.host = "192.168.2.208"
+        self.user = "lefteris"
+        self.password = "lefteris"
+        self.host = "192.168.0.128"
         self.database = "YELP_DB"
 
     def execute_query(self, query):
@@ -181,7 +181,7 @@ class YelpServer(object):
             self.execute_query(\
                 "update Review set {} = '{}' where review_id='{}'".format(reaction, react_count[0][0]+1, review_id))
 
-        
+        return 0
         
 
     # def get_post(self, user, date):
