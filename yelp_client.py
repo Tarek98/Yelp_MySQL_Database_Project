@@ -86,6 +86,8 @@ react - Adds a reaction to the review specified as the argument (only for review
 
         while(True):
 
+            result = 999
+
             command_string = raw_input()
 
             input_list = command_string.split(" ")
@@ -137,13 +139,12 @@ react - Adds a reaction to the review specified as the argument (only for review
 
             elif command == "follow":
 
-                if len(input_list) != 3:
-                    print("Invalid input. Please add follow type and either a user ID, business ID, or category.")
-                    continue
-
                 follow_type = input_list[1]
 
                 if follow_type == "user":
+                    if len(input_list) != 3:
+                        print("Invalid input. Please add follow type and either a user ID, business ID, or category.")
+                        continue
                     user_id = input_list[2]
                     result = self.follow_user(user_id)
                     if result == 0:
@@ -152,6 +153,9 @@ react - Adds a reaction to the review specified as the argument (only for review
                         print("Invalid user ID. The user does not exist.")
 
                 elif follow_type == "business":
+                    if len(input_list) != 3:
+                        print("Invalid input. Please add follow type and either a user ID, business ID, or category.")
+                        continue
                     business_id = input_list[2]
                     result = self.follow_business(business_id)
                     if result == 0:
@@ -160,6 +164,7 @@ react - Adds a reaction to the review specified as the argument (only for review
                         print("Invalid business ID. The business does not exist.")
 
                 elif follow_type == "category":
+                    input_list = command_string.split(" ", 2)
                     category = input_list[2]
                     result = self.follow_category(category)
                     if result == 0:
