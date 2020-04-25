@@ -142,7 +142,7 @@ react - Adds a reaction to the review specified as the argument (only for review
 
                 if follow_type == "user":
                     user_id = input_list[2]
-                    self.follow_user(user_id)
+                    result = self.follow_user(user_id)
                     if result == 0:
                         print("User {} followed successfully.".format(user_id))
                     elif result == -2:
@@ -150,7 +150,7 @@ react - Adds a reaction to the review specified as the argument (only for review
 
                 elif follow_type == "business":
                     business_id = input_list[2]
-                    self.follow_business(business_id)
+                    result = self.follow_business(business_id)
                     if result == 0:
                         print("Business {} followed successfully.".format(business_id))
                     elif result == -2:
@@ -158,7 +158,7 @@ react - Adds a reaction to the review specified as the argument (only for review
 
                 elif follow_type == "category":
                     category = input_list[2]
-                    self.follow_category(category)
+                    result = self.follow_category(category)
                     if result == 0:
                         print("{} followed successfully.".format(category))
                     elif result == -2:
@@ -167,20 +167,22 @@ react - Adds a reaction to the review specified as the argument (only for review
                     print('Invalid follow type. Valid follow types are "user", "business", or "category".')
 
             elif command == "feed":
-                posts = []
                 if len(input_list) == 2 and input_list[1].isdigit():
                     posts = self.feed(input_list[1])
-                    for i,p in enumerate(posts):
-                        print("\n--- Post {} ---".format(i) + "\n")
-                        print("Review ID: " + p.review_id + "\n")
-                        print("Business ID: " + p.business_id + "\n")
-                        print("Author ID: " + p.user_id + "\n")
-                        print("Stars: " + p.stars + "\n")
-                        print("Text: " + p.text + "\n")
-                        print("Date: " + p.date + "\n")
-                        print("Useful: " + p.useful + "\n")
-                        print("Funny: " + p.funny + "\n")
-                        print("Cool: " + p.cool + "\n")
+                    if not posts:
+                        print("[]")
+                    else:
+                        for i,p in enumerate(posts):
+                            print("\n--- Post {} ---".format(i) + "\n")
+                            print("Review ID: " + p.review_id + "\n")
+                            print("Business ID: " + p.business_id + "\n")
+                            print("Author ID: " + p.user_id + "\n")
+                            print("Stars: " + p.stars + "\n")
+                            print("Text: " + p.text + "\n")
+                            print("Date: " + p.date + "\n")
+                            print("Useful: " + p.useful + "\n")
+                            print("Funny: " + p.funny + "\n")
+                            print("Cool: " + p.cool + "\n")
 
                 elif len(input_list) == 1:
                     print(self.feed())
@@ -202,7 +204,7 @@ react - Adds a reaction to the review specified as the argument (only for review
                     print("Invalid reaction type.")
                     continue
 
-                self.react_to_review(review_id, reaction)
+                result = self.react_to_review(review_id, reaction)
                 if result == 0:
                     print("Reacted to review {} successfully.".format(review_id))
                 elif result == -2:
