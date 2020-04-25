@@ -4,9 +4,9 @@ from mysql.connector import errorcode
 
 class YelpServer(object):
     def __init__(self):
-        self.user = "lefteris"
-        self.password = "lefteris"
-        self.host = "192.168.0.128"
+        self.user = "user_356"
+        self.password = "user_356"
+        self.host = "192.168.2.208"
         self.database = "YELP_DB"
 
     def execute_query(self, query):
@@ -159,7 +159,9 @@ class YelpServer(object):
 
         cur_reaction = self.execute_query(q_str)
 
-        if len(cur_reaction) != 0:
+        print("cur_reaction:",cur_reaction)
+        
+        if cur_reaction is not None and len(cur_reaction) != 0:
             self.execute_query(\
                 "update ReviewReacts set react_type = '{}' where user_id='{}' and review_id='{}'".format(reaction, user_id, review_id))
             if cur_reaction[0][0] != reaction:
@@ -172,8 +174,7 @@ class YelpServer(object):
                                 "select {} from Review where review_id='{}'".format(reaction, review_id))
                 self.execute_query(\
                     "update Review set {} = '{}' where review_id='{}'".format(reaction, react_count[0][0]+1, review_id))
-
-        elif len(cur_reaction) == 0:
+        else:
             self.execute_query(\
                 "insert into ReviewReacts (review_id, user_id, react_type) values ('{}', '{}', '{}')".format(review_id, user_id, reaction))
             react_count = self.execute_query(\

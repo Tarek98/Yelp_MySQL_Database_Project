@@ -1,4 +1,5 @@
 import yelp_api
+import sys
 
 class Client(object):
     def __init__(self):
@@ -45,6 +46,9 @@ react - Adds a reaction to the review specified as the argument (only for review
     For a review:
         <reaction-type> can be "useful", "funny", "cool"
 
+exit - Logs the user out and exits from client program
+    usage:
+        exit
         """
 
         print(help_string)
@@ -73,7 +77,9 @@ react - Adds a reaction to the review specified as the argument (only for review
 
         while(True):
             user_login = raw_input().split(" ")[0]
-            if len(user_login) == 22:
+            if user_login == "exit":
+                sys.exit()
+            elif len(user_login) == 22:
                 if self.ys.login_user(user_login) == 0:
                     self.user_id = user_login
                     break
@@ -224,6 +230,9 @@ react - Adds a reaction to the review specified as the argument (only for review
                     print("Reacted to review {} successfully.".format(review_id))
                 elif result == -2:
                     print("Invalid review_id. The review does not exist.")
+
+            elif command == "exit":
+                sys.exit()
 
             else:
                 print('Invalid input. Please try again. For more information type "help".')
