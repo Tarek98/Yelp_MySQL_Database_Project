@@ -4,8 +4,8 @@ from mysql.connector import errorcode
 
 class YelpServer(object):
     def __init__(self):
-        self.user = "user_356"
-        self.password = "user_356"
+        self.user = "user_yelp"
+        self.password = "user_yelp"
         self.host = "192.168.2.208"
         self.database = "YELP_DB"
 
