@@ -1,6 +1,8 @@
 # Yelp_Database_Project
 Yelp SQL database using a real dataset from Kaggle, and a CLI client that communicates with an API making queries to the database, to emulate the Yelp social network's functionality for educational purposes. 
 
+The MySQL relational database is run on an Ubuntu Server VM to emulate a database server for Yelp, and the client runs on the main operating system hosting the VM which emulates a user's app communicating with the database server.
+
 ## Dependencies
 - pip install mysql-connector-python
 
@@ -11,7 +13,7 @@ Yelp SQL database using a real dataset from Kaggle, and a CLI client that commun
 - run yelp_schema.sql on the VM
 - run load_data.sql on the VM
 
-## Running the CLI client (on any host OS)
+## Running the CLI client (on the host OS)
 - set the IP address of the ubuntu VM in yelp_api.py and set the credentials of your SQL user
 - run yelp_client.py with no arguments
 - for a list of commands type help
