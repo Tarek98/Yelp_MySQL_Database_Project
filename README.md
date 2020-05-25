@@ -1,4 +1,4 @@
-# ece356_project
+# Yelp_Database_Project
 Yelp educational database
 
 
