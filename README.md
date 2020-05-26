@@ -1,7 +1,7 @@
 # Yelp_Database_Project
 A MySQL database using a real Yelp dataset from Kaggle, and a CLI client that communicates with an API making queries to the database, to emulate the Yelp social network's functionality for educational purposes. 
 
-MySQL server is run on an Ubuntu VM to emulate a database server for Yelp, and the client runs on the main operating system hosting the VM which emulates a user's app communicating with the database.
+MySQL server (with Yelp database) is run on an Ubuntu VM, and the client (frontend) runs on the main operating system hosting the VM.
 
 ## Dependencies
 - pip install mysql-connector-python
